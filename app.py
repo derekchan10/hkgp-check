@@ -39,32 +39,44 @@ def match_results():
         # 提取账号后三位
         account_df['account_last3'] = account_df['account'].str[-3:].astype(str)
         
-        # 处理姓名数据
-        def process_name(name):
+        # 处理结果数据
+        # 假设结果文件的四列分别是：账号后三位、名字头5个字母，投注数，中签数
+        result_df.columns = ['account_last3', 'name_first5', 'buy_count', 'win_count']
+        
+        # 处理结果数据中的名字，去掉空格
+        result_df['name_first5'] = result_df['name_first5'].astype(str).str.replace(' ', '')
+        
+        # 统计结果文件中不同长度名字的数量，确定最常见的长度
+        name_lengths = result_df['name_first5'].str.len().value_counts()
+        if not name_lengths.empty:
+            # 获取最常见的名字长度
+            most_common_length = name_lengths.index[0]
+        else:
+            # 默认长度为5
+            most_common_length = 5
+            
+        print(f"检测到结果文件中最常见的名字长度为: {most_common_length}")
+        
+        # 对结果数据中的名字进行大写处理
+        result_df['name_first5'] = result_df['name_first5'].str.upper()
+        
+        # 处理账号文件中的姓名数据，根据检测到的长度来截取
+        def process_name(name, target_length):
             name_str = str(name)
             # 检查是否包含英文字母
             if re.search('[a-zA-Z]', name_str):
                 # 提取所有英文字母
                 letters = re.findall('[a-zA-Z]', name_str)
-                return ''.join(letters)[:5].upper()
+                return ''.join(letters)[:target_length].upper()
             else:
                 # 对中文姓名转换为拼音并大写
                 pinyin = lazy_pinyin(name_str, style=Style.NORMAL)
                 # 拼接拼音并去掉空格
                 full_pinyin = ''.join(pinyin).upper().replace(' ', '')
-                return full_pinyin[:5]
+                return full_pinyin[:target_length]
         
-        account_df['name_first5'] = account_df['name'].apply(process_name)
-        
-        # 处理结果数据
-        # 假设结果文件的四列分别是：账号后三位、名字头5个字母，投注数，中签数
-        result_df.columns = ['account_last3', 'name_first5', 'buy_count', 'win_count']
-        
-        # 处理结果数据中的名字，去掉空格以保证匹配
-        # 先移除名字中的所有空格
-        result_df['name_first5'] = result_df['name_first5'].astype(str).str.replace(' ', '')
-        # 然后截取前5个字符
-        result_df['name_first5'] = result_df['name_first5'].str[:5].str.upper()
+        # 根据检测到的长度来处理账号文件中的姓名
+        account_df['name_first5'] = account_df['name'].apply(lambda x: process_name(x, most_common_length))
         
         # 合并数据
         merged_results = []
