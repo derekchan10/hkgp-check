@@ -9,6 +9,20 @@ document.addEventListener('DOMContentLoaded', function() {
     matchForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
+        // 检查文件是否已选择
+        const accountFile = document.getElementById('accountFile').files[0];
+        const resultFile = document.getElementById('resultFile').files[0];
+        
+        if (!accountFile) {
+            alert('请选择账号文件');
+            return;
+        }
+        
+        if (!resultFile) {
+            alert('请选择中签结果文件');
+            return;
+        }
+        
         // 显示加载状态
         const submitBtn = matchForm.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.innerHTML;

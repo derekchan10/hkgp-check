@@ -18,14 +18,14 @@
                         <form id="matchForm" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="accountFile" class="form-label">账号文件（Excel格式，两列：姓名、账号）</label>
-                                <input type="file" class="form-control" id="accountFile" name="account_file" accept=".xlsx,.xls">
-                                <div class="form-text">若不上传则使用默认文件 account.xlsx</div>
+                                <input type="file" class="form-control" id="accountFile" name="account_file" accept=".xlsx,.xls" required>
+                                <div class="form-text">请上传Excel格式的账号文件</div>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="resultFile" class="form-label">中签结果文件（Excel格式，四列：账号后三位、名字头5个字母，投注数，中签数）</label>
-                                <input type="file" class="form-control" id="resultFile" name="result_file" accept=".xlsx,.xls">
-                                <div class="form-text">若不上传则使用默认文件 result.xlsx</div>
+                                <input type="file" class="form-control" id="resultFile" name="result_file" accept=".xlsx,.xls" required>
+                                <div class="form-text">请上传Excel格式的中签结果文件</div>
                             </div>
                             
                             <div class="d-grid">

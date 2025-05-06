@@ -16,17 +16,21 @@ def match_results():
     try:
         # 读取账号文件
         account_file = request.files.get('account_file')
-        if not account_file and os.path.exists('account.xlsx'):
-            account_df = pd.read_excel('account.xlsx')
-        else:
-            account_df = pd.read_excel(account_file)
+        if not account_file:
+            return jsonify({
+                'status': 'error',
+                'message': '请上传账号文件'
+            })
+        account_df = pd.read_excel(account_file)
         
         # 读取中签结果文件
         result_file = request.files.get('result_file')
-        if not result_file and os.path.exists('result.xlsx'):
-            result_df = pd.read_excel('result.xlsx')
-        else:
-            result_df = pd.read_excel(result_file)
+        if not result_file:
+            return jsonify({
+                'status': 'error',
+                'message': '请上传中签结果文件'
+            })
+        result_df = pd.read_excel(result_file)
         
         # 处理账号数据
         account_df.columns = ['name', 'account']
