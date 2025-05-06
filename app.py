@@ -67,7 +67,11 @@ def match_results():
         merged_results = []
         total_win_count = 0  # 总计中签数
         for _, account_row in account_df.iterrows():
-            account_last3 = int(account_row['account_last3'])
+            # 尝试转换为整数，如果失败则保持字符串格式
+            try:
+                account_last3 = int(account_row['account_last3'])
+            except ValueError:
+                account_last3 = account_row['account_last3']
             name_first5 = account_row['name_first5']
             # 在结果文件中查找匹配项
             matches = result_df[(result_df['account_last3'] == account_last3) & 
