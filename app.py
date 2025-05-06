@@ -61,7 +61,10 @@ def match_results():
         result_df.columns = ['account_last3', 'name_first5', 'buy_count', 'win_count']
         
         # 处理结果数据中的名字，去掉空格以保证匹配
-        result_df['name_first5'] = result_df['name_first5'].str.replace(' ', '')
+        # 先移除名字中的所有空格
+        result_df['name_first5'] = result_df['name_first5'].astype(str).str.replace(' ', '')
+        # 然后截取前5个字符
+        result_df['name_first5'] = result_df['name_first5'].str[:5].str.upper()
         
         # 合并数据
         merged_results = []
