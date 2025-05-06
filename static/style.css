@@ -1,0 +1,59 @@
+body {
+    background-color: #f5f5f5;
+    font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    max-width: 900px;
+}
+
+h1 {
+    color: #333;
+    font-weight: 600;
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f3f3f3;
+}
+
+.badge {
+    font-size: 14px;
+    padding: 6px 10px;
+}
+
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #007bff;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.result-highlight {
+    background-color: #d4edda;
+    animation: highlight-fade 2s ease-out;
+}
+
+@keyframes highlight-fade {
+    from { background-color: #d4edda; }
+    to { background-color: transparent; }
+} 
