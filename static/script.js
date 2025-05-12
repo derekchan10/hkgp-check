@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalMatchesElement = document.getElementById('totalMatches');
     const summarySection = document.getElementById('summarySection');
     const totalWinCountElement = document.getElementById('totalWinCount');
+    const downloadBtn = document.getElementById('downloadBtn');
+    
+    // 下载按钮点击事件
+    downloadBtn.addEventListener('click', function() {
+        window.location.href = '/download_csv';
+    });
     
     matchForm.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -60,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     noResultRow.innerHTML = '<td colspan="4" class="text-center">未找到匹配项</td>';
                     resultTable.appendChild(noResultRow);
                     summarySection.style.display = 'none';
+                    downloadBtn.style.display = 'none';
                     return;
                 }
                 
@@ -85,6 +92,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     summarySection.style.display = 'none';
                 }
+                
+                // 显示下载按钮
+                downloadBtn.style.display = data.has_results ? 'inline-block' : 'none';
                 
                 // 平滑滚动到结果区域
                 resultSection.scrollIntoView({ behavior: 'smooth' });
