@@ -53,6 +53,16 @@ h1 {
     animation: highlight-fade 2s ease-out;
 }
 
+.unmatched-row {
+    background-color: #fff3cd;
+    opacity: 0.8;
+}
+
+.unmatched-row:hover {
+    background-color: #ffeaa7;
+    opacity: 1;
+}
+
 @keyframes highlight-fade {
     from { background-color: #d4edda; }
     to { background-color: transparent; }

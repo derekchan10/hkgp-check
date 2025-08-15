@@ -40,10 +40,13 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">比对结果</h5>
                             <div>
-                                <button id="downloadBtn" class="btn btn-success btn-sm me-2" style="display: none;">
-                                    下载结果
-                                </button>
-                                <span class="badge bg-primary" id="totalMatches">0</span>
+                                <div class="d-flex gap-2">
+                                    <button id="downloadBtn" class="btn btn-success btn-sm me-2" style="display: none;">
+                                        下载结果
+                                    </button>
+                                    <span class="badge bg-primary" id="totalMatches">匹配: 0</span>
+                                    <span class="badge bg-warning" id="totalUnmatched">未匹配: 0</span>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">
@@ -55,6 +58,7 @@
                                             <th>账号</th>
                                             <th>投注数</th>
                                             <th>中签数</th>
+                                            <th>状态</th>
                                         </tr>
                                     </thead>
                                     <tbody id="resultTable">

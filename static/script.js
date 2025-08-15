@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultSection = document.getElementById('resultSection');
     const resultTable = document.getElementById('resultTable');
     const totalMatchesElement = document.getElementById('totalMatches');
+    const totalUnmatchedElement = document.getElementById('totalUnmatched');
     const summarySection = document.getElementById('summarySection');
     const totalWinCountElement = document.getElementById('totalWinCount');
     const downloadBtn = document.getElementById('downloadBtn');
@@ -58,12 +59,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 resultSection.style.display = 'block';
                 
                 // 设置匹配总数
-                totalMatchesElement.textContent = data.total_matches;
+                totalMatchesElement.textContent = `匹配: ${data.total_matches}`;
+                totalUnmatchedElement.textContent = `未匹配: ${data.total_unmatched}`;
                 
-                // 如果没有匹配项
-                if (data.total_matches === 0) {
+                // 如果没有数据
+                if (data.total_matches === 0 && data.total_unmatched === 0) {
                     const noResultRow = document.createElement('tr');
-                    noResultRow.innerHTML = '<td colspan="4" class="text-center">未找到匹配项</td>';
+                    noResultRow.innerHTML = '<td colspan="5" class="text-center">没有数据</td>';
                     resultTable.appendChild(noResultRow);
                     summarySection.style.display = 'none';
                     downloadBtn.style.display = 'none';
@@ -73,13 +75,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 添加结果到表格
                 data.data.forEach(item => {
                     const row = document.createElement('tr');
-                    row.classList.add('result-highlight');
+                    
+                    // 根据状态设置行的样式
+                    if (item.status === 'matched') {
+                        row.classList.add('result-highlight');
+                    } else {
+                        row.classList.add('unmatched-row');
+                    }
+                    
+                    // 设置状态显示
+                    let statusHtml = '';
+                    if (item.status === 'matched') {
+                        statusHtml = '<span class="badge bg-success">已匹配</span>';
+                    } else {
+                        statusHtml = '<span class="badge bg-warning">未匹配</span>';
+                    }
                     
                     row.innerHTML = `
                         <td>${item.name}</td>
                         <td>${item.account}</td>
-                        <td>${item.buy_count}</td>
-                        <td>${item.win_count > 0 ? '<span class="text-success fw-bold">' + item.win_count + '</span>' : '0'}</td>
+                        <td>${item.buy_count || '-'}</td>
+                        <td>${item.win_count > 0 ? '<span class="text-success fw-bold">' + item.win_count + '</span>' : (item.status === 'matched' ? '0' : '-')}</td>
+                        <td>${statusHtml}</td>
                     `;
                     
                     resultTable.appendChild(row);

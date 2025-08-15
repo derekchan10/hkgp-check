@@ -82,6 +82,8 @@ def match_results():
         # 合并数据
         merged_results = []
         total_win_count = 0  # 总计中签数
+        
+        # 遍历所有账号，确保每个账号都有结果
         for _, account_row in account_df.iterrows():
             # 尝试转换为整数，如果失败则保持字符串格式
             try:
@@ -89,11 +91,13 @@ def match_results():
             except ValueError:
                 account_last3 = account_row['account_last3']
             name_first5 = account_row['name_first5']
+            
             # 在结果文件中查找匹配项
             matches = result_df[(result_df['account_last3'] == account_last3) & 
                               (result_df['name_first5'] == name_first5)]
             
             if not matches.empty:
+                # 有匹配项
                 for _, match in matches.iterrows():
                     win_count = match['win_count']
                     total_win_count += win_count  # 累加中签数
@@ -103,8 +107,20 @@ def match_results():
                         'name': account_row['name'],
                         'account': account_row['account'],
                         'buy_count': match['buy_count'],
-                        'win_count': win_count
+                        'win_count': win_count,
+                        'status': 'matched'  # 标记为已匹配
                     })
+            else:
+                # 没有匹配项，标记为未匹配
+                merged_results.append({
+                    'account_last3': account_last3,
+                    'name_first5': name_first5,
+                    'name': account_row['name'],
+                    'account': account_row['account'],
+                    'buy_count': 0,
+                    'win_count': 0,
+                    'status': 'unmatched'  # 标记为未匹配
+                })
         
         # 将结果保存到session中，供下载使用
         if merged_results:
@@ -113,7 +129,8 @@ def match_results():
         return jsonify({
             'status': 'success',
             'data': merged_results,
-            'total_matches': len(merged_results),
+            'total_matches': len([r for r in merged_results if r['status'] == 'matched']),
+            'total_unmatched': len([r for r in merged_results if r['status'] == 'unmatched']),
             'total_win_count': total_win_count,
             'has_results': bool(merged_results)  # 添加标志位表示是否有结果可供下载
         })
@@ -141,6 +158,10 @@ def download_csv():
         # 添加总计行
         total_win_count = df['win_count'].sum()
         total_buy_count = df['buy_count'].sum()
+        
+        # 重新排列列的顺序，让状态列更明显
+        column_order = ['name', 'account', 'buy_count', 'win_count', 'status']
+        df = df[column_order]
         
         # 将DataFrame转换为CSV
         output = BytesIO()
