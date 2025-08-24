@@ -61,6 +61,12 @@ def match_results():
         # 对结果数据中的名字进行大写处理
         result_df['name_first5'] = result_df['name_first5'].str.upper()
         
+        # 特殊拼音映射表
+        special_pinyin_map = {
+            '长': 'chang',
+            '翟': 'zhai'
+        }
+        
         # 处理账号文件中的姓名数据，根据检测到的长度来截取
         def process_name(name, target_length):
             name_str = str(name)
@@ -72,13 +78,23 @@ def match_results():
             else:
                 # 对中文姓名转换为拼音并大写
                 pinyin = lazy_pinyin(name_str, style=Style.NORMAL)
+                # 应用特殊拼音规则
+                processed_pinyin = []
+                for i, py in enumerate(pinyin):
+                    # 检查对应位置的汉字
+                    if i < len(name_str):
+                        char = name_str[i]
+                        # 使用映射表获取特殊拼音，如果没有则使用默认拼音
+                        processed_pinyin.append(special_pinyin_map.get(char, py))
+                    else:
+                        processed_pinyin.append(py)
                 # 拼接拼音并去掉空格
-                full_pinyin = ''.join(pinyin).upper().replace(' ', '')
+                full_pinyin = ''.join(processed_pinyin).upper().replace(' ', '')
                 return full_pinyin[:target_length]
         
         # 根据检测到的长度来处理账号文件中的姓名
         account_df['name_first5'] = account_df['name'].apply(lambda x: process_name(x, most_common_length))
-        
+
         # 合并数据
         merged_results = []
         total_win_count = 0  # 总计中签数
