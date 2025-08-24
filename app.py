@@ -64,7 +64,8 @@ def match_results():
         # 特殊拼音映射表
         special_pinyin_map = {
             '长': 'chang',
-            '翟': 'zhai'
+            '翟': 'zhai',
+            '绿': 'lyu',
         }
         
         # 处理账号文件中的姓名数据，根据检测到的长度来截取
