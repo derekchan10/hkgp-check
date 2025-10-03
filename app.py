@@ -4,6 +4,7 @@ import os
 import re
 from pypinyin import lazy_pinyin, Style
 from io import BytesIO
+import random
 
 app = Flask(__name__)
 
@@ -185,8 +186,9 @@ def download_csv():
         df.to_csv(output, index=False, encoding='utf-8-sig')  # 使用utf-8-sig以支持Excel中文显示
         output.seek(0)
         
-        # 生成下载文件名
-        filename = f'中签结果_{pd.Timestamp.now().strftime("%Y%m%d_%H%M%S")}.csv'
+        # 生成下载文件名(时间戳 + 6位随机数)
+        random_num = random.randint(100000, 999999)
+        filename = f'中签结果_{pd.Timestamp.now().strftime("%Y%m%d_%H%M%S")}_{random_num}.csv'
         
         return send_file(
             output,
