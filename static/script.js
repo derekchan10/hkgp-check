@@ -7,10 +7,62 @@ document.addEventListener('DOMContentLoaded', function() {
     const summarySection = document.getElementById('summarySection');
     const totalWinCountElement = document.getElementById('totalWinCount');
     const downloadBtn = document.getElementById('downloadBtn');
-    
+
+    // 存储当前匹配结果
+    let currentResults = null;
+
+    // 将数据转换为 CSV 格式
+    function convertToCSV(data) {
+        if (!data || data.length === 0) return '';
+
+        // CSV 表头
+        const headers = ['姓名', '账号', '投注数', '中签数', '状态'];
+        const headerLine = headers.join(',');
+
+        // CSV 数据行
+        const dataLines = data.map(item => {
+            return [
+                item.name,
+                item.account,
+                item.buy_count,
+                item.win_count,
+                item.status === 'matched' ? '已匹配' : '未匹配'
+            ].join(',');
+        });
+
+        // 添加 BOM 以支持 Excel 中文显示
+        return '\ufeff' + [headerLine, ...dataLines].join('\n');
+    }
+
+    // 下载 CSV 文件
+    function downloadCSV(csvContent, filename) {
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+    }
+
     // 下载按钮点击事件
     downloadBtn.addEventListener('click', function() {
-        window.location.href = '/download_csv';
+        if (!currentResults || currentResults.length === 0) {
+            alert('没有可供下载的数据');
+            return;
+        }
+
+        const csv = convertToCSV(currentResults);
+        const date = new Date().toISOString().split('T')[0].replace(/-/g, '');
+        const filename = `中签结果_${date}.csv`;
+
+        downloadCSV(csv, filename);
     });
     
     matchForm.addEventListener('submit', function(e) {
@@ -52,16 +104,19 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 处理响应
             if (data.status === 'success') {
+                // 保存当前匹配结果
+                currentResults = data.data;
+
                 // 清空之前的结果
                 resultTable.innerHTML = '';
-                
+
                 // 显示结果区域
                 resultSection.style.display = 'block';
-                
+
                 // 设置匹配总数
                 totalMatchesElement.textContent = `匹配: ${data.total_matches}`;
                 totalUnmatchedElement.textContent = `未匹配: ${data.total_unmatched}`;
-                
+
                 // 如果没有数据
                 if (data.total_matches === 0 && data.total_unmatched === 0) {
                     const noResultRow = document.createElement('tr');
@@ -69,6 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     resultTable.appendChild(noResultRow);
                     summarySection.style.display = 'none';
                     downloadBtn.style.display = 'none';
+                    currentResults = null;
                     return;
                 }
                 

@@ -1,10 +1,7 @@
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify
 import pandas as pd
-import os
 import re
 from pypinyin import lazy_pinyin, Style
-from io import BytesIO
-import random
 
 app = Flask(__name__)
 
@@ -140,63 +137,15 @@ def match_results():
                     'status': 'unmatched'  # 标记为未匹配
                 })
         
-        # 将结果保存到session中，供下载使用
-        if merged_results:
-            app.config['LAST_RESULTS'] = merged_results
-        
         return jsonify({
             'status': 'success',
             'data': merged_results,
             'total_matches': len([r for r in merged_results if r['status'] == 'matched']),
             'total_unmatched': len([r for r in merged_results if r['status'] == 'unmatched']),
             'total_win_count': total_win_count,
-            'has_results': bool(merged_results)  # 添加标志位表示是否有结果可供下载
+            'has_results': bool(merged_results)
         })
     
-    except Exception as e:
-        return jsonify({
-            'status': 'error',
-            'message': str(e)
-        })
-
-@app.route('/download_csv')
-def download_csv():
-    try:
-        # 获取最后的匹配结果
-        results = app.config.get('LAST_RESULTS')
-        if not results:
-            return jsonify({
-                'status': 'error',
-                'message': '没有可供下载的数据'
-            })
-        
-        # 创建DataFrame
-        df = pd.DataFrame(results)
-        
-        # 添加总计行
-        total_win_count = df['win_count'].sum()
-        total_buy_count = df['buy_count'].sum()
-        
-        # 重新排列列的顺序，让状态列更明显
-        column_order = ['name', 'account', 'buy_count', 'win_count', 'status']
-        df = df[column_order]
-        
-        # 将DataFrame转换为CSV
-        output = BytesIO()
-        df.to_csv(output, index=False, encoding='utf-8-sig')  # 使用utf-8-sig以支持Excel中文显示
-        output.seek(0)
-        
-        # 生成下载文件名(时间戳 + 6位随机数)
-        random_num = random.randint(100000, 999999)
-        filename = f'中签结果_{pd.Timestamp.now().strftime("%Y%m%d_%H%M%S")}_{random_num}.csv'
-        
-        return send_file(
-            output,
-            mimetype='text/csv',
-            as_attachment=True,
-            download_name=filename
-        )
-        
     except Exception as e:
         return jsonify({
             'status': 'error',
