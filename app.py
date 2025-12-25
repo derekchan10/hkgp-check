@@ -109,8 +109,8 @@ def match_results():
             name_first5 = account_row['name_first5']
             
             # 在结果文件中查找匹配项
-            matches = result_df[(result_df['account_last3'] == account_last3) & 
-                              (result_df['name_first5'] == name_first5)]
+            matches = result_df[(result_df['account_last3'].astype(str) == str(account_last3)) &
+                              (result_df['name_first5'].astype(str) == str(name_first5))]
             
             if not matches.empty:
                 # 有匹配项
