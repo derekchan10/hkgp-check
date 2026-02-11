@@ -1,13 +1,19 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 import pandas as pd
 import re
 from pypinyin import lazy_pinyin, Style
+import os
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/download-template')
+def download_template():
+    template_path = os.path.join(os.path.dirname(__file__), 'account.xlsx')
+    return send_file(template_path, as_attachment=True, download_name='账号模板.xlsx')
 
 @app.route('/match', methods=['POST'])
 def match_results():
