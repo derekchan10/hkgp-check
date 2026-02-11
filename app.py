@@ -41,7 +41,13 @@ def match_results():
         # 处理结果数据
         # 假设结果文件的四列分别是：账号后三位、名字头5个字母，投注数，中签数
         result_df.columns = ['account_last3', 'name_first5', 'buy_count', 'win_count']
-        
+
+        # 过滤掉包含空值的行
+        result_df = result_df.dropna(subset=['account_last3', 'name_first5'])
+
+        # 转换账号后三位为整数
+        result_df['account_last3'] = result_df['account_last3'].astype(int)
+
         # 处理结果数据中的名字，去掉空格
         result_df['name_first5'] = result_df['name_first5'].astype(str).str.replace(' ', '')
         
@@ -103,17 +109,16 @@ def match_results():
         
         # 遍历所有账号，确保每个账号都有结果
         for _, account_row in account_df.iterrows():
-            # 尝试转换为整数，如果失败则保持字符串格式
-            try:
-                account_last3 = int(account_row['account_last3'])
-            except ValueError:
-                account_last3 = account_row['account_last3']
+            # 转换为整数
+            account_last3 = int(account_row['account_last3'])
             name_first5 = account_row['name_first5']
-            
-            # 在结果文件中查找匹配项
-            matches = result_df[(result_df['account_last3'].astype(str) == str(account_last3)) &
-                              (result_df['name_first5'].astype(str) == str(name_first5))]
-            
+
+            # 在结果文件中查找匹配项，使用整数比较
+            matches = result_df[
+                (result_df['account_last3'] == account_last3) &
+                (result_df['name_first5'] == str(name_first5))
+            ]
+
             if not matches.empty:
                 # 有匹配项
                 for _, match in matches.iterrows():
