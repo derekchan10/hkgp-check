@@ -2,8 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const matchForm = document.getElementById('matchForm');
     const resultSection = document.getElementById('resultSection');
     const resultTable = document.getElementById('resultTable');
-    const totalMatchesElement = document.getElementById('totalMatches');
-    const totalUnmatchedElement = document.getElementById('totalUnmatched');
     const summarySection = document.getElementById('summarySection');
     const totalWinCountElement = document.getElementById('totalWinCount');
     const downloadBtn = document.getElementById('downloadBtn');
@@ -233,9 +231,6 @@ document.addEventListener('DOMContentLoaded', function() {
         resultTable.innerHTML = '';
         resultSection.style.display = 'block';
 
-        totalMatchesElement.textContent = `匹配: ${data.total_matches}`;
-        totalUnmatchedElement.textContent = `未匹配: ${data.total_unmatched}`;
-
         if (data.total_matches === 0 && data.total_unmatched === 0) {
             const noResultRow = document.createElement('tr');
             noResultRow.innerHTML = '<td colspan="5" class="text-center">没有数据</td>';
@@ -270,12 +265,13 @@ document.addEventListener('DOMContentLoaded', function() {
             resultTable.appendChild(row);
         });
 
-        if (data.total_win_count > 0) {
-            totalWinCountElement.textContent = data.total_win_count;
-            summarySection.style.display = 'block';
-        } else {
-            summarySection.style.display = 'none';
-        }
+        document.getElementById('totalMatchesSummary').textContent = data.total_matches;
+        document.getElementById('totalUnmatchedSummary').textContent = data.total_unmatched;
+        totalWinCountElement.textContent = data.total_win_count;
+        const wonAccounts = data.data.filter(i => i.status === 'matched' && i.win_count > 0).length;
+        const rate = data.total_matches > 0 ? (wonAccounts / data.total_matches * 100).toFixed(1) + '%' : '-';
+        document.getElementById('totalWinRate').textContent = rate;
+        summarySection.style.display = data.has_results ? 'block' : 'none';
 
         downloadBtn.style.display = data.has_results ? 'inline-block' : 'none';
 

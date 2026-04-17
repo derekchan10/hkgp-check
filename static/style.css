@@ -66,4 +66,122 @@ h1 {
 @keyframes highlight-fade {
     from { background-color: #d4edda; }
     to { background-color: transparent; }
+}
+
+/* 浮动广告 */
+.float-ad {
+    position: fixed;
+    z-index: 9999;
+    background: #fffbe6;
+    border: 2px solid #ffc107;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.8;
+}
+.float-ad-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #aaa;
+    line-height: 1;
+    padding: 0;
+}
+.float-ad-close:hover { color: #666; }
+.float-ad-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.float-ad-title {
+    font-weight: bold;
+    color: #d48806;
+    font-size: 16px;
+}
+.float-ad-close-inline {
+    font-size: 14px;
+    padding: 2px 6px;
+    line-height: 1.4;
+}
+.float-ad-sub {
+    margin-bottom: 8px;
+    color: #888;
+    font-size: 12px;
+}
+.float-ad-hr {
+    margin: 8px 0;
+    border-color: #ffc107;
+}
+.float-ad-list {
+    color: #333;
+    text-align: left;
+}
+.copy-btn {
+    display: inline-block;
+    margin-bottom: 6px;
+    padding: 4px 12px;
+    font-size: 12px;
+    background: #ffc107;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.copy-btn:hover { background: #e0a800; }
+.copy-btn-sm {
+    padding: 2px 8px;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-bottom: 0;
+}
+
+/* 桌面端：右侧竖排 */
+.float-ad-desktop { display: block; }
+.float-ad-mobile  { display: none; }
+
+@media (min-width: 769px) {
+    .float-ad {
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 200px;
+        border-radius: 12px;
+        padding: 18px 16px;
+    }
+}
+
+/* 手机端：底部横条 */
+@media (max-width: 768px) {
+    .float-ad {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        transform: none;
+        width: 100%;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        padding: 0;
+    }
+    .float-ad-desktop { display: none; }
+    .float-ad-mobile  { display: block; }
+.float-ad-mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 7px 12px;
+        font-weight: bold;
+        color: #d48806;
+        font-size: 12px;
+    }
+    .float-ad-mobile-body {
+        padding: 4px 12px 7px;
+        font-size: 11px;
+        border-top: 1px solid #ffc107;
+        color: #333;
+    }
 } 
