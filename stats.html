@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>港股中签率统计</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/style.css?v=202605011354">
+    <link rel="stylesheet" href="static/style.css?v=202605011355">
 </head>
 <body>
     <div class="container mt-5">
@@ -391,22 +391,22 @@
             hidePreview();
         });
 
-        let lastPreviewUrl = null;
-        function showPreview(blob) {
-            if (lastPreviewUrl) URL.revokeObjectURL(lastPreviewUrl);
-            lastPreviewUrl = URL.createObjectURL(blob);
+        const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+        function showPreview(dataUrl, mobileTip) {
             const preview = document.getElementById('imgPreview');
             const img = document.getElementById('imgPreviewImg');
-            img.src = lastPreviewUrl;
+            const tip = preview.querySelector('.img-preview-tip');
+            img.src = dataUrl;
+            tip.textContent = mobileTip || '📱 长按下方图片可"存储到照片"';
             preview.style.display = 'block';
+            preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         function hidePreview() {
             const preview = document.getElementById('imgPreview');
             preview.style.display = 'none';
-            if (lastPreviewUrl) {
-                URL.revokeObjectURL(lastPreviewUrl);
-                lastPreviewUrl = null;
-            }
+            const img = document.getElementById('imgPreviewImg');
+            img.src = '';
         }
 
         function downloadBlob(blob, filename) {
@@ -417,29 +417,36 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
 
-        async function saveImage(blob, filename) {
+        async function saveImage(blob, filename, dataUrl) {
             const file = new File([blob], filename, { type: 'image/png' });
+            // 1) 优先 Web Share API（iOS Safari / Android Chrome 都能进相册）
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     await navigator.share({
                         files: [file],
                         title: `${currentStats.name} 中签率统计`
                     });
-                    showPreview(blob);
+                    showPreview(dataUrl, '✅ 已弹出系统分享面板。如未进相册，可长按下方图片保存。');
                     return;
                 } catch (e) {
                     if (e.name === 'AbortError') {
-                        showPreview(blob);
+                        showPreview(dataUrl, '已取消分享。可长按下方图片"存储到照片"。');
                         return;
                     }
-                    // 其他错误 → 走下载回退
+                    // 其他错误 → 继续走下面的回退
                 }
             }
+            // 2) 手机端不支持 Share API：直接显示预览，靠长按存图（最普遍可用）
+            if (isMobile) {
+                showPreview(dataUrl, '📱 长按下方图片，选择"存储到照片"或"下载图片"');
+                return;
+            }
+            // 3) 桌面：下载到本地
             downloadBlob(blob, filename);
-            showPreview(blob);
+            showPreview(dataUrl, '✅ 已保存。也可右键下方图片"图片另存为"。');
         }
 
         downloadImgBtn.addEventListener('click', async function() {
@@ -450,10 +457,11 @@
             downloadImgBtn.textContent = '生成中...';
             try {
                 const canvas = await html2canvas(el, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+                const dataUrl = canvas.toDataURL('image/png');
                 const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
                 if (!blob) throw new Error('图片生成为空');
                 const filename = `${currentStats.code}_${currentStats.name}_中签率统计.png`;
-                await saveImage(blob, filename);
+                await saveImage(blob, filename, dataUrl);
             } catch (e) {
                 setError('生成图片失败：' + e.message);
             } finally {
