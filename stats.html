@@ -89,21 +89,11 @@
             </div>
             <div class="float-ad-mobile-body">
                 <div class="float-ad-list">✅ 高胜率认购策略 &nbsp;✅ 自动化认购 &nbsp;✅ 中签查询 &nbsp;✅ 一键卖出</div>
-                <div id="mobileQR" style="display:none;text-align:center;margin-top:8px;">
-                    <img src="static/wechat-qr.jpg" alt="微信二维码" style="width:140px;border-radius:6px;">
-                </div>
-                <div style="text-align:center;margin-top:4px;">
-                    <button class="copy-btn copy-btn-sm" style="margin-bottom:0;" onclick="toggleMobileQR()">扫码加微信</button>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
-        function toggleMobileQR() {
-            var qr = document.getElementById('mobileQR');
-            qr.style.display = qr.style.display === 'none' ? 'block' : 'none';
-        }
         function copyWechat() {
             navigator.clipboard.writeText('DC101000').then(function() {
                 document.querySelectorAll('.copy-btn').forEach(function(btn) { btn.textContent = '已复制✓'; });
