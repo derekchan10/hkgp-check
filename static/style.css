@@ -139,6 +139,7 @@ h1 {
     #exportArea { padding: 12px 8px; }
     #exportArea table { font-size: 11px; }
     #exportArea th, #exportArea td { padding: 3px 4px; }
+    body { padding-bottom: 100px; }
 }
 
 .rate-cell.rate-r1 { background: #f4b5b1; color: #7a2820; }
