@@ -132,8 +132,14 @@ h1 {
     color: #555;
 }
 .rate-cell { font-weight: 700; }
-.type-jia { background: #e9ecef; font-weight: 700; color: #495057; }
-.type-yi { background: #d1e7dd; font-weight: 700; color: #0f5132; }
+.type-jia { background: #e9ecef; font-weight: 700; color: #495057; white-space: nowrap; }
+.type-yi { background: #d1e7dd; font-weight: 700; color: #0f5132; white-space: nowrap; }
+#exportArea th, #exportArea td { white-space: nowrap; }
+@media (max-width: 768px) {
+    #exportArea { padding: 12px 8px; }
+    #exportArea table { font-size: 11px; }
+    #exportArea th, #exportArea td { padding: 3px 4px; }
+}
 
 .rate-cell.rate-r1 { background: #f4b5b1; color: #7a2820; }
 .rate-cell.rate-r2 { background: #f5c4a0; color: #7a3a18; }
