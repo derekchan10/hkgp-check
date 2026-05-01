@@ -49,9 +49,9 @@
                                     <thead id="statsThead">
                                         <tr>
                                             <th>投注数</th>
-                                            <th>申购账户数</th>
-                                            <th>中签账户数</th>
-                                            <th>综合中签率</th>
+                                            <th>申购</th>
+                                            <th>中签</th>
+                                            <th>中签率</th>
                                         </tr>
                                     </thead>
                                     <tbody id="statsTbody"></tbody>
@@ -283,8 +283,8 @@
             const showType = Number.isFinite(issuePrice) && issuePrice > 0;
             const thead = document.getElementById('statsThead');
             thead.innerHTML = showType
-                ? '<tr><th>类型</th><th>投注数</th><th>申购账户数</th><th>中签账户数</th><th>综合中签率</th></tr>'
-                : '<tr><th>投注数</th><th>申购账户数</th><th>中签账户数</th><th>综合中签率</th></tr>';
+                ? '<tr><th>类型</th><th>投注数</th><th>申购</th><th>中签</th><th>中签率</th></tr>'
+                : '<tr><th>投注数</th><th>申购</th><th>中签</th><th>中签率</th></tr>';
             statsTbody.innerHTML = '';
             let hasYi = false;
             for (const t of stats.tiers) {
