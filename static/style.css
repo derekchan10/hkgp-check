@@ -141,7 +141,8 @@ h1 {
     #exportArea th, #exportArea td { padding: 3px 4px; }
     #exportArea .stats-summary {
         font-size: 12px;
-        gap: 4px 12px;
+        flex-direction: column;
+        gap: 2px;
         padding: 8px;
     }
     body { padding-bottom: 100px; }
