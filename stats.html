@@ -48,8 +48,8 @@
                                 <table>
                                     <thead id="statsThead">
                                         <tr>
-                                            <th>投注数</th>
                                             <th>申购数</th>
+                                            <th>账户数</th>
                                             <th>中签数</th>
                                             <th>中签率</th>
                                         </tr>
@@ -283,8 +283,8 @@
             const showType = Number.isFinite(issuePrice) && issuePrice > 0;
             const thead = document.getElementById('statsThead');
             thead.innerHTML = showType
-                ? '<tr><th>类型</th><th>投注数</th><th>申购数</th><th>中签数</th><th>中签率</th></tr>'
-                : '<tr><th>投注数</th><th>申购数</th><th>中签数</th><th>中签率</th></tr>';
+                ? '<tr><th>类型</th><th>申购数</th><th>账户数</th><th>中签数</th><th>中签率</th></tr>'
+                : '<tr><th>申购数</th><th>账户数</th><th>中签数</th><th>中签率</th></tr>';
             statsTbody.innerHTML = '';
             let hasYi = false;
             for (const t of stats.tiers) {
