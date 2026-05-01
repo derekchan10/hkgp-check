@@ -153,6 +153,26 @@ h1 {
 .rate-cell.rate-r4 { background: #c8d8a4; color: #3f5520; }
 .rate-cell.rate-r5 { background: #9bc28c; color: #2d4a1e; }
 
+.img-preview {
+    margin-top: 16px;
+    padding: 12px;
+    background: #f8f9fa;
+    border: 1px dashed #adb5bd;
+    border-radius: 6px;
+    text-align: center;
+}
+.img-preview-tip {
+    color: #495057;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+.img-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
 .nav-link-top {
     display: inline-block;
     padding: 6px 14px;
