@@ -142,6 +142,13 @@ h1 {
 .type-jia { background: #e9ecef; font-weight: 700; color: #495057; white-space: nowrap; }
 .type-yi { background: #d1e7dd; font-weight: 700; color: #0f5132; white-space: nowrap; }
 #exportArea th, #exportArea td { white-space: nowrap; }
+#exportArea { overflow-x: auto; }
+#exportArea .export-content {
+    display: inline-block;
+    min-width: 100%;
+    text-align: left;
+    vertical-align: top;
+}
 @media (max-width: 768px) {
     #exportArea { padding: 12px 8px; }
     #exportArea table { font-size: 13px; }
