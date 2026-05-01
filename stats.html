@@ -399,10 +399,16 @@
             const preview = document.getElementById('imgPreview');
             const img = document.getElementById('imgPreviewImg');
             const tip = preview.querySelector('.img-preview-tip');
-            img.src = dataUrl;
             tip.textContent = mobileTip || '📱 长按下方图片可"存储到照片"';
             preview.style.display = 'block';
-            preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const doScroll = () => preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (img.src === dataUrl && img.complete) {
+                doScroll();
+                return;
+            }
+            img.onload = doScroll;
+            img.onerror = doScroll;
+            img.src = dataUrl;
         }
         function hidePreview() {
             const preview = document.getElementById('imgPreview');
