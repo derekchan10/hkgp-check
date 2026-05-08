@@ -144,6 +144,26 @@ h1 {
 #exportArea tbody td { white-space: nowrap; }
 #exportArea thead th { white-space: normal; word-break: keep-all; }
 #exportArea .export-content { display: block; }
+#exportArea .export-content.export-image-layout {
+    width: 375px;
+    padding: 18px 14px 20px;
+    background: #fff;
+    box-sizing: border-box;
+}
+#exportArea .export-content.export-image-layout table {
+    font-size: 12px;
+    table-layout: fixed;
+}
+#exportArea .export-content.export-image-layout th,
+#exportArea .export-content.export-image-layout td {
+    padding: 4px 2px;
+}
+#exportArea .export-content.export-image-layout .stats-summary {
+    font-size: 11px;
+    gap: 2px 8px;
+    padding: 8px 4px;
+    flex-wrap: nowrap;
+}
 @media (max-width: 768px) {
     #exportArea { padding: 12px 6px; }
     #exportArea table { font-size: 12px; table-layout: fixed; }
