@@ -147,9 +147,21 @@ h1 {
 #exportArea .export-content.export-image-layout {
     position: relative;
     width: 375px;
-    padding: 34px 14px 20px;
-    background: #fff;
+    padding: 40px 14px 20px;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.52) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.52) 50%, rgba(255, 255, 255, 0.52) 75%, transparent 75%) 0 0 / 24px 24px,
+        linear-gradient(180deg, #ecfeff 0, #fff7ed 32px, #fff 40px);
     box-sizing: border-box;
+    overflow: hidden;
+}
+#exportArea .export-content.export-image-layout::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 30px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(217, 119, 6, 0.35), transparent);
 }
 #exportArea .export-content.export-image-layout > :not(.export-watermark) {
     position: relative;
