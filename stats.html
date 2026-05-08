@@ -127,6 +127,7 @@
         const resetBtn = document.getElementById('resetBtn');
 
         const nameCache = new Map();
+        const watermarkText = 'hk.dcdddd.com';
         let currentStats = null;
 
         function setStatus(msg) {
@@ -471,7 +472,13 @@
                     useCORS: true,
                     onclone: clonedDoc => {
                         const exportContent = clonedDoc.querySelector('#exportArea .export-content');
-                        if (exportContent) exportContent.classList.add('export-image-layout');
+                        if (exportContent) {
+                            exportContent.classList.add('export-image-layout');
+                            const watermark = clonedDoc.createElement('div');
+                            watermark.className = 'export-watermark';
+                            watermark.textContent = watermarkText;
+                            exportContent.prepend(watermark);
+                        }
                     }
                 });
                 const dataUrl = canvas.toDataURL('image/png');

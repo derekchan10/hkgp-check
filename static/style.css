@@ -145,10 +145,28 @@ h1 {
 #exportArea thead th { white-space: normal; word-break: keep-all; }
 #exportArea .export-content { display: block; }
 #exportArea .export-content.export-image-layout {
+    position: relative;
     width: 375px;
-    padding: 18px 14px 20px;
+    padding: 34px 14px 20px;
     background: #fff;
     box-sizing: border-box;
+}
+#exportArea .export-content.export-image-layout > :not(.export-watermark) {
+    position: relative;
+    z-index: 1;
+}
+#exportArea .export-content.export-image-layout .export-watermark {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 0;
+    transform: translate(-50%, -50%) rotate(-56deg);
+    color: rgba(0, 0, 0, 0.13);
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    pointer-events: none;
 }
 #exportArea .export-content.export-image-layout table {
     font-size: 12px;
